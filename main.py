@@ -15,4 +15,10 @@ while running:
             # If the user clicks the close button
             running = False
 
+    screen.fill("gray")
+    pygame.draw.rect(screen, "red", (80, 80, 200, 200))
+    pygame.draw.circle(screen, "blue", (500, 200), 50)
+    
+    pygame.display.flip()
+
 pygame.quit()
