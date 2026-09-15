@@ -7,7 +7,7 @@ pygame.display.set_caption("My Ludo Game")
 
 ROWS = 15
 COLS = 15
-CELL_SIZE = 35
+CELL_SIZE = 40
 
 # colors
 WHITE = (255, 255, 255)
@@ -43,6 +43,12 @@ def draw_home_areas():
         screen,
         YELLOW,
         (9 * CELL_SIZE, 9 * CELL_SIZE, 6 * CELL_SIZE, 6 * CELL_SIZE)
+    )
+
+    pygame.draw.rect(
+        screen,
+        WHITE,
+        (6 * CELL_SIZE, 6 * CELL_SIZE, 3 * CELL_SIZE, 3 * CELL_SIZE)
     )
 
 #
