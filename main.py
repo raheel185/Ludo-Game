@@ -64,8 +64,8 @@ while running:
     screen.fill("white")
     draw_home_areas()
 
-    for row in range(15):
-        for column in range(15):
+    for row in range(ROWS):
+        for column in range(COLS):
 
             x = column * CELL_SIZE
             y = row * CELL_SIZE
