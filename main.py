@@ -78,7 +78,7 @@ BLUE = (60, 120, 220)
 
 #
 
-token_position = 0
+token_position = 30
 
 def draw_token(position):
     column, row = PATH[position]
