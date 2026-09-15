@@ -78,6 +78,23 @@ BLUE = (60, 120, 220)
 
 #
 
+token_position = 0
+
+def draw_token(position):
+    column, row = PATH[position]
+
+    x = column * CELL_SIZE + CELL_SIZE // 2
+    y = row * CELL_SIZE + CELL_SIZE // 2
+
+    pygame.draw.circle(
+        screen,
+        RED,
+        (x, y),
+        CELL_SIZE // 3
+    )
+
+#
+
 def draw_path():
     for position in PATH:
 
@@ -158,7 +175,8 @@ while running:
             )
 
     draw_home_areas()
-    # draw_path()
+    draw_path()
+    draw_token(token_position)
 
     pygame.display.flip()
 
