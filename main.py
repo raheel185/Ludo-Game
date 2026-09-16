@@ -88,7 +88,7 @@ BLUE = (60, 120, 220)
 
 #
 
-tokens = [0, -1, -1, -1]
+tokens = [-1, -1, -1, -1]
 selected_token = None
 dice_value = None
 
@@ -181,14 +181,29 @@ def draw_home_areas():
 #
 # Move token function
 
+
 def move_token(token_index, amount):
     global dice_value
 
-    new_position = tokens[token_index] + amount
+    current_position = tokens[token_index]
 
-    if 0 <= new_position < len(PATH):
+    # Token is in base
+    if current_position == -1:
+
+        # Only a 6 can bring it onto the board
+        if amount == 6:
+            tokens[token_index] = 0
+            dice_value = None
+
+        return
+
+    # Token is already on the path
+    new_position = current_position + amount
+
+    if new_position < len(PATH):
         tokens[token_index] = new_position
         dice_value = None
+
 
 # end move func
 #
@@ -199,7 +214,7 @@ def roll_dice():
 
     dice_value = random.randint(1, 6)
 
-#
+# End roll dice
 #
 
 
@@ -217,10 +232,8 @@ while running:
 
             if event.key == pygame.K_RIGHT:
                 if dice_value is not None and selected_token is not None:
-
-                    if tokens[selected_token] != -1:
-                        move_token(selected_token, dice_value)
-                        selected_token = None
+                    move_token(selected_token, dice_value)
+                    selected_token = None
 
         if event.type == pygame.MOUSEBUTTONDOWN:
             mouse_x, mouse_y = event.pos
