@@ -65,6 +65,13 @@ PATH = [
     (6, 1),
 ]
 
+BASE_POSITIONS = [
+    (2, 2),
+    (4, 2),
+    (2, 4),
+    (4, 4)
+]
+
 
 ROWS = 15
 COLS = 15
@@ -81,7 +88,7 @@ BLUE = (60, 120, 220)
 
 #
 
-tokens = [0, 0, 0, 0]
+tokens = [-1, -1, -1, -1]
 selected_token = None
 dice_value = None
 
@@ -89,13 +96,16 @@ TOKEN_COLOR = GREEN
 
 #
 
-def draw_token(position, color, offset_x=0, offset_y=0, selected=False):
-    column, row = PATH[position]
+def draw_token(position, color, offset_x=0, offset_y=0, selected=False, token_index=0):
+
+    if position == -1:
+        column, row = BASE_POSITIONS[token_index]
+    else:
+        column, row = PATH[position]
 
     x = column * CELL_SIZE + CELL_SIZE // 2 + offset_x
     y = row * CELL_SIZE + CELL_SIZE // 2 + offset_y
 
-    # Highlight selected token
     if selected:
         pygame.draw.circle(
             screen,
@@ -110,6 +120,8 @@ def draw_token(position, color, offset_x=0, offset_y=0, selected=False):
         (x, y),
         CELL_SIZE // 3
     )
+
+
 #
 
 def draw_path():
@@ -217,7 +229,11 @@ while running:
             mouse_x, mouse_y = event.pos
 
             for i in range(4):
-                column, row = PATH[tokens[i]]
+
+                if tokens[i] == -1:
+                    column, row = BASE_POSITIONS[i]
+                else:
+                    column, row = PATH[tokens[i]]
 
                 token_x = column * CELL_SIZE + CELL_SIZE // 2 + offsets[i][0]
                 token_y = row * CELL_SIZE + CELL_SIZE // 2 + offsets[i][1]
@@ -262,7 +278,8 @@ while running:
             TOKEN_COLOR,
             offsets[i][0],
             offsets[i][1],
-            selected=(i == selected_token)
+            selected=(i == selected_token),
+            token_index=i
         )
 
     if dice_value is not None:
