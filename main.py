@@ -204,10 +204,14 @@ while running:
                 roll_dice()
 
             if event.key == pygame.K_RIGHT:
-                move_token(0, dice_value)
+                if dice_value is not None and selected_token is not None:
+                    move_token(selected_token, dice_value)
+                    selected_token = None
 
             if event.key == pygame.K_LEFT:
-                move_token(0, dice_value)
+                if dice_value is not None and selected_token is not None:
+                    move_token(selected_token, dice_value)
+                    selected_token = None
 
         if event.type == pygame.MOUSEBUTTONDOWN:
             mouse_x, mouse_y = event.pos
