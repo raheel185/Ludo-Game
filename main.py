@@ -299,8 +299,6 @@ while running:
             BLACK
         )
         screen.blit(dice_text, (620, 500))
-
-    
     
 
     pygame.display.flip()
