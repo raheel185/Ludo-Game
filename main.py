@@ -89,11 +89,20 @@ TOKEN_COLOR = GREEN
 
 #
 
-def draw_token(position, color, offset_x=0, offset_y=0):
+def draw_token(position, color, offset_x=0, offset_y=0, selected=False):
     column, row = PATH[position]
 
     x = column * CELL_SIZE + CELL_SIZE // 2 + offset_x
     y = row * CELL_SIZE + CELL_SIZE // 2 + offset_y
+
+    # Highlight selected token
+    if selected:
+        pygame.draw.circle(
+            screen,
+            BLACK,
+            (x, y),
+            CELL_SIZE // 2
+        )
 
     pygame.draw.circle(
         screen,
@@ -248,7 +257,8 @@ while running:
             tokens[i],
             TOKEN_COLOR,
             offsets[i][0],
-            offsets[i][1]
+            offsets[i][1],
+            selected=(i == selected_token)
         )
 
     if dice_value is not None:
