@@ -78,7 +78,7 @@ BLUE = (60, 120, 220)
 
 #
 
-token_position = 30
+token_position = 0
 
 def draw_token(position):
     column, row = PATH[position]
@@ -161,10 +161,12 @@ while running:
         if event.type == pygame.KEYDOWN:
 
             if event.key == pygame.K_RIGHT:
-                token_position += 1
+                if token_position < len(PATH) - 1:
+                    token_position += 1
 
             if event.key == pygame.K_LEFT:
-                token_position -= 1
+                if token_position > 0:
+                    token_position -= 1
 
     screen.fill("white")
 
