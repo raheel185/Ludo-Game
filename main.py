@@ -1,6 +1,9 @@
 import pygame
+import random
 
 pygame.init()
+
+font = pygame.font.Font(None, 50)
 
 screen = pygame.display.set_mode((800, 600))
 pygame.display.set_caption("My Ludo Game")
@@ -79,6 +82,9 @@ BLUE = (60, 120, 220)
 #
 
 token_position = 0
+dice_value = None
+
+#
 
 def draw_token(position):
     column, row = PATH[position]
@@ -154,13 +160,26 @@ def draw_home_areas():
 
 def move_token(amount):
     global token_position
+    global dice_value
 
     new_position = token_position + amount
 
+
     if 0 <= new_position < len(PATH):
         token_position = new_position
+        dice_value = None
 
 # end move func
+#
+# roll dice function
+
+def roll_dice():
+    global dice_value
+
+    dice_value = random.randint(1, 6)
+
+#
+#
 
 
 running = True
@@ -172,13 +191,22 @@ while running:
             running = False
         if event.type == pygame.KEYDOWN:
 
+            if event.key == pygame.K_SPACE:
+                roll_dice()
+
             if event.key == pygame.K_RIGHT:
-                if token_position < len(PATH) - 1:
-                    move_token(1)
+                move_token(dice_value)
 
             if event.key == pygame.K_LEFT:
-                if token_position > 0:
-                    move_token(-1)
+                move_token(dice_value)
+
+            if event.key == pygame.K_UP:
+                move_token(dice_value)
+
+            if event.key == pygame.K_DOWN:
+                move_token(dice_value)
+
+            
 
     screen.fill("white")
 
@@ -198,6 +226,14 @@ while running:
     draw_home_areas()
     draw_path()
     draw_token(token_position)
+
+    if dice_value is not None:
+        dice_text = font.render(
+            f"Dice: {dice_value}",
+            True,
+            BLACK
+        )
+        screen.blit(dice_text, (620, 500))
 
     pygame.display.flip()
 
