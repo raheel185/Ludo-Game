@@ -88,7 +88,7 @@ BLUE = (60, 120, 220)
 
 #
 
-tokens = [-1, -1, -1, -1]
+tokens = [0, -1, -1, -1]
 selected_token = None
 dice_value = None
 
@@ -217,13 +217,10 @@ while running:
 
             if event.key == pygame.K_RIGHT:
                 if dice_value is not None and selected_token is not None:
-                    move_token(selected_token, dice_value)
-                    selected_token = None
 
-            if event.key == pygame.K_LEFT:
-                if dice_value is not None and selected_token is not None:
-                    move_token(selected_token, dice_value)
-                    selected_token = None
+                    if tokens[selected_token] != -1:
+                        move_token(selected_token, dice_value)
+                        selected_token = None
 
         if event.type == pygame.MOUSEBUTTONDOWN:
             mouse_x, mouse_y = event.pos
