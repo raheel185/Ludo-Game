@@ -81,24 +81,26 @@ BLUE = (60, 120, 220)
 
 #
 
-token_position = 0
+tokens = [0, 0, 0, 0]
+selected_token = None
 dice_value = None
+
+TOKEN_COLOR = GREEN
 
 #
 
-def draw_token(position):
+def draw_token(position, color, offset_x=0, offset_y=0):
     column, row = PATH[position]
 
-    x = column * CELL_SIZE + CELL_SIZE // 2
-    y = row * CELL_SIZE + CELL_SIZE // 2
+    x = column * CELL_SIZE + CELL_SIZE // 2 + offset_x
+    y = row * CELL_SIZE + CELL_SIZE // 2 + offset_y
 
     pygame.draw.circle(
         screen,
-        RED,
+        color,
         (x, y),
         CELL_SIZE // 3
     )
-
 #
 
 def draw_path():
@@ -158,15 +160,13 @@ def draw_home_areas():
 #
 # Move token function
 
-def move_token(amount):
-    global token_position
+def move_token(token_index, amount):
     global dice_value
 
-    new_position = token_position + amount
-
+    new_position = tokens[token_index] + amount
 
     if 0 <= new_position < len(PATH):
-        token_position = new_position
+        tokens[token_index] = new_position
         dice_value = None
 
 # end move func
@@ -195,16 +195,26 @@ while running:
                 roll_dice()
 
             if event.key == pygame.K_RIGHT:
-                move_token(dice_value)
+                move_token(0, dice_value)
 
             if event.key == pygame.K_LEFT:
-                move_token(dice_value)
+                move_token(0, dice_value)
 
-            if event.key == pygame.K_UP:
-                move_token(dice_value)
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            mouse_x, mouse_y = event.pos
 
-            if event.key == pygame.K_DOWN:
-                move_token(dice_value)
+            for i in range(4):
+                column, row = PATH[tokens[i]]
+
+                token_x = column * CELL_SIZE + CELL_SIZE // 2 + offsets[i][0]
+                token_y = row * CELL_SIZE + CELL_SIZE // 2 + offsets[i][1]
+
+                distance = ((mouse_x - token_x) ** 2 +
+                            (mouse_y - token_y) ** 2) ** 0.5
+
+                if distance <= CELL_SIZE // 3:
+                    selected_token = i
+                    print("Selected token:", i)
 
             
 
@@ -225,7 +235,21 @@ while running:
 
     draw_home_areas()
     draw_path()
-    draw_token(token_position)
+
+    offsets = [
+    (-8, -8),
+    (8, -8),
+    (-8, 8),
+    (8, 8)
+]
+
+    for i in range(4):
+        draw_token(
+            tokens[i],
+            TOKEN_COLOR,
+            offsets[i][0],
+            offsets[i][1]
+        )
 
     if dice_value is not None:
         dice_text = font.render(
@@ -234,6 +258,9 @@ while running:
             BLACK
         )
         screen.blit(dice_text, (620, 500))
+
+    
+    
 
     pygame.display.flip()
 
