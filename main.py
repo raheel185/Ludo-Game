@@ -150,6 +150,18 @@ def draw_home_areas():
     )
 
 #
+# Move token function
+
+def move_token(amount):
+    global token_position
+
+    new_position = token_position + amount
+
+    if 0 <= new_position < len(PATH):
+        token_position = new_position
+
+# end move func
+
 
 running = True
 
@@ -162,11 +174,11 @@ while running:
 
             if event.key == pygame.K_RIGHT:
                 if token_position < len(PATH) - 1:
-                    token_position += 1
+                    move_token(1)
 
             if event.key == pygame.K_LEFT:
                 if token_position > 0:
-                    token_position -= 1
+                    move_token(-1)
 
     screen.fill("white")
 
