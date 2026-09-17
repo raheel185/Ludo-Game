@@ -201,36 +201,48 @@ def draw_path():
 #
 
 def draw_home_areas():
+    border_width = 8
+
+    # Red home
     pygame.draw.rect(
         screen,
-        WHITE,
-        (0, 0, 6 * CELL_SIZE, 6 * CELL_SIZE)
+        RED,
+        (0, 0, 6 * CELL_SIZE, 6 * CELL_SIZE),
+        border_width
     )
 
+    # Green home
     pygame.draw.rect(
         screen,
         GREEN,
-        (9 * CELL_SIZE, 0, 6 * CELL_SIZE, 6 * CELL_SIZE)
+        (9 * CELL_SIZE, 0, 6 * CELL_SIZE, 6 * CELL_SIZE),
+        border_width
     )
 
+    # Blue home
     pygame.draw.rect(
         screen,
         BLUE,
-        (0, 9 * CELL_SIZE, 6 * CELL_SIZE, 6 * CELL_SIZE)
+        (0, 9 * CELL_SIZE, 6 * CELL_SIZE, 6 * CELL_SIZE),
+        border_width
     )
 
+    # Yellow home
     pygame.draw.rect(
         screen,
         YELLOW,
-        (9 * CELL_SIZE, 9 * CELL_SIZE, 6 * CELL_SIZE, 6 * CELL_SIZE)
+        (9 * CELL_SIZE, 9 * CELL_SIZE, 6 * CELL_SIZE, 6 * CELL_SIZE),
+        border_width
     )
 
+    # Center
     pygame.draw.rect(
         screen,
         WHITE,
         (6 * CELL_SIZE, 6 * CELL_SIZE, 3 * CELL_SIZE, 3 * CELL_SIZE)
     )
 
+    # Current player indicator
     player_text = player_font.render(
         f"Player {current_player + 1}'s Turn",
         True,
@@ -238,7 +250,6 @@ def draw_home_areas():
     )
 
     screen.blit(player_text, (620, 50))
-
 #
 # Can Move func
 
