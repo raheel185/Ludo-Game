@@ -4,6 +4,7 @@ import random
 pygame.init()
 
 font = pygame.font.Font(None, 50)
+player_font = pygame.font.Font(None, 25)
 
 screen = pygame.display.set_mode((800, 600))
 pygame.display.set_caption("My Ludo Game")
@@ -86,8 +87,11 @@ GREEN = (50, 180, 80)
 YELLOW = (240, 200, 50)
 BLUE = (60, 120, 220)
 
+# 
+# Game State Variables
 #
 
+current_player = 0
 tokens = [-1, -1, -1, -1]
 selected_token = None
 dice_value = None
@@ -178,6 +182,14 @@ def draw_home_areas():
         (6 * CELL_SIZE, 6 * CELL_SIZE, 3 * CELL_SIZE, 3 * CELL_SIZE)
     )
 
+    player_text = player_font.render(
+        f"Player {current_player + 1}'s Turn",
+        True,
+        BLACK
+    )
+
+    screen.blit(player_text, (620, 50))
+
 #
 # Can Move func
 
@@ -221,8 +233,14 @@ def move_token(token_index, amount):
         tokens[token_index] = new_position
         dice_value = None
 
-
 # end move func
+#
+
+def next_turn():
+    global current_player
+
+    current_player = (current_player + 1) % 4
+
 #
 # roll dice function
 
@@ -250,8 +268,14 @@ while running:
 
             if event.key == pygame.K_RIGHT:
                 if dice_value is not None and selected_token is not None:
+                    old_dice = dice_value
+
                     move_token(selected_token, dice_value)
                     selected_token = None
+
+                    if dice_value is None:
+                        if old_dice != 6:
+                            next_turn()
 
         if event.type == pygame.MOUSEBUTTONDOWN:
             mouse_x, mouse_y = event.pos
@@ -321,6 +345,7 @@ while running:
             BLACK
         )
         screen.blit(dice_text, (620, 500))
+        
     
 
     pygame.display.flip()
