@@ -270,7 +270,8 @@ def can_move(token_index):
     # Token is already on the path
     new_position = current_position + dice_value
 
-    return new_position < len(PATH)
+    # Allow the token to wrap around the board
+    return True
 
 #
 #
@@ -282,9 +283,8 @@ def has_any_legal_move():
 
     return False
 
-
+#
 # Move token function
-
 
 def move_token(token_index, amount):
     global dice_value
@@ -300,11 +300,10 @@ def move_token(token_index, amount):
         return
 
     # Token is already on the path
-    new_position = current_position + amount
+    new_position = (current_position + amount) % len(PATH)
 
-    if new_position < len(PATH):
-        tokens[current_player][token_index] = new_position
-        dice_value = None
+    tokens[current_player][token_index] = new_position
+    dice_value = None
 
 # end move func
 #
