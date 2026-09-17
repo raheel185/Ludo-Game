@@ -269,6 +269,16 @@ def can_move(token_index):
     return new_position < len(PATH)
 
 #
+#
+
+def has_any_legal_move():
+    for token_index in range(4):
+        if can_move(token_index):
+            return True
+
+    return False
+
+
 # Move token function
 
 
@@ -323,8 +333,15 @@ while running:
         if event.type == pygame.KEYDOWN:
 
             if event.key == pygame.K_SPACE:
-                roll_dice()
-                selected_token = None
+                if dice_value is None:
+                    roll_dice()
+                    selected_token = None
+
+                    if not has_any_legal_move():
+                        print("No legal moves.")
+
+                        dice_value = None
+                        next_turn()
 
             if event.key == pygame.K_RIGHT:
                 if dice_value is not None and selected_token is not None:
