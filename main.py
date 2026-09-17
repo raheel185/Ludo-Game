@@ -67,10 +67,37 @@ PATH = [
 ]
 
 BASE_POSITIONS = [
-    (2, 2),
-    (4, 2),
-    (2, 4),
-    (4, 4)
+    # Player 1 - Red
+    [
+        (2, 2),
+        (4, 2),
+        (2, 4),
+        (4, 4)
+    ],
+
+    # Player 2 - Green
+    [
+        (10, 2),
+        (12, 2),
+        (10, 4),
+        (12, 4)
+    ],
+
+    # Player 3 - Yellow
+    [
+        (10, 10),
+        (12, 10),
+        (10, 12),
+        (12, 12)
+    ],
+
+    # Player 4 - Blue
+    [
+        (2, 10),
+        (4, 10),
+        (2, 12),
+        (4, 12)
+    ]
 ]
 
 
@@ -87,12 +114,26 @@ GREEN = (50, 180, 80)
 YELLOW = (240, 200, 50)
 BLUE = (60, 120, 220)
 
+PLAYER_COLORS = [
+    RED,
+    GREEN,
+    YELLOW,
+    BLUE
+]
+
 # 
 # Game State Variables
 #
 
 current_player = 0
-tokens = [-1, -1, -1, -1]
+
+tokens = [
+    [-1, -1, -1, -1],  # Player 1
+    [-1, -1, -1, -1],  # Player 2
+    [-1, -1, -1, -1],  # Player 3
+    [-1, -1, -1, -1]   # Player 4
+]
+
 selected_token = None
 dice_value = None
 
@@ -100,10 +141,18 @@ TOKEN_COLOR = GREEN
 
 #
 
-def draw_token(position, color, offset_x=0, offset_y=0, selected=False, token_index=0):
 
+def draw_token(
+    position,
+    color,
+    player_index,
+    token_index,
+    offset_x=0,
+    offset_y=0,
+    selected=False
+):
     if position == -1:
-        column, row = BASE_POSITIONS[token_index]
+        column, row = BASE_POSITIONS[player_index][token_index]
     else:
         column, row = PATH[position]
 
@@ -154,7 +203,7 @@ def draw_path():
 def draw_home_areas():
     pygame.draw.rect(
         screen,
-        RED,
+        WHITE,
         (0, 0, 6 * CELL_SIZE, 6 * CELL_SIZE)
     )
 
@@ -197,7 +246,7 @@ def can_move(token_index):
     if dice_value is None:
         return False
 
-    current_position = tokens[token_index]
+    current_position = tokens[current_player][token_index]
 
     # Token is in base
     if current_position == -1:
@@ -211,17 +260,17 @@ def can_move(token_index):
 #
 # Move token function
 
+
 def move_token(token_index, amount):
     global dice_value
 
-    current_position = tokens[token_index]
+    current_position = tokens[current_player][token_index]
 
     # Token is in base
     if current_position == -1:
 
-        # Only a 6 can bring it onto the board
         if amount == 6:
-            tokens[token_index] = 0
+            tokens[current_player][token_index] = 0
             dice_value = None
 
         return
@@ -230,7 +279,7 @@ def move_token(token_index, amount):
     new_position = current_position + amount
 
     if new_position < len(PATH):
-        tokens[token_index] = new_position
+        tokens[current_player][token_index] = new_position
         dice_value = None
 
 # end move func
@@ -282,16 +331,27 @@ while running:
 
             for i in range(4):
 
-                if tokens[i] == -1:
-                    column, row = BASE_POSITIONS[i]
+                if tokens[current_player][i] == -1:
+                    column, row = BASE_POSITIONS[current_player][i]
                 else:
-                    column, row = PATH[tokens[i]]
+                    column, row = PATH[tokens[current_player][i]]
 
-                token_x = column * CELL_SIZE + CELL_SIZE // 2 + offsets[i][0]
-                token_y = row * CELL_SIZE + CELL_SIZE // 2 + offsets[i][1]
+                token_x = (
+                    column * CELL_SIZE
+                    + CELL_SIZE // 2
+                    + offsets[i][0]
+                )
 
-                distance = ((mouse_x - token_x) ** 2 +
-                            (mouse_y - token_y) ** 2) ** 0.5
+                token_y = (
+                    row * CELL_SIZE
+                    + CELL_SIZE // 2
+                    + offsets[i][1]
+                )
+
+                distance = (
+                    (mouse_x - token_x) ** 2
+                    + (mouse_y - token_y) ** 2
+                ) ** 0.5
 
                 if distance <= CELL_SIZE // 3:
 
@@ -328,16 +388,23 @@ while running:
     (8, 8)
 ]
 
-    for i in range(4):
-        draw_token(
-            tokens[i],
-            TOKEN_COLOR,
-            offsets[i][0],
-            offsets[i][1],
-            selected=(i == selected_token),
-            token_index=i
-        )
+    for player_index in range(4):
+        for token_index in range(4):
 
+            draw_token(
+                tokens[player_index][token_index],
+                PLAYER_COLORS[player_index],
+                player_index,
+                token_index,
+                offsets[token_index][0],
+                offsets[token_index][1],
+                selected=(
+                    selected_token == token_index
+                    and player_index == current_player
+                )
+            )
+
+    
     if dice_value is not None:
         dice_text = font.render(
             f"Dice: {dice_value}",
