@@ -246,6 +246,7 @@ while running:
 
             if event.key == pygame.K_SPACE:
                 roll_dice()
+                selected_token = None
 
             if event.key == pygame.K_RIGHT:
                 if dice_value is not None and selected_token is not None:
