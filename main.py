@@ -105,7 +105,9 @@ ROWS = 15
 COLS = 15
 CELL_SIZE = 40
 
+#
 # colors
+#
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 
@@ -120,6 +122,8 @@ PLAYER_COLORS = [
     YELLOW,
     BLUE
 ]
+
+PLAYER_STARTS = [0, 13, 26, 39]
 
 # 
 # Game State Variables
@@ -291,9 +295,8 @@ def move_token(token_index, amount):
     if current_position == -1:
 
         if amount == 6:
-            tokens[current_player][token_index] = 0
+            tokens[current_player][token_index] = PLAYER_STARTS[current_player]
             dice_value = None
-
         return
 
     # Token is already on the path
