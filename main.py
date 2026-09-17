@@ -179,8 +179,25 @@ def draw_home_areas():
     )
 
 #
-# Move token function
+# Can Move func
 
+def can_move(token_index):
+    if dice_value is None:
+        return False
+
+    current_position = tokens[token_index]
+
+    # Token is in base
+    if current_position == -1:
+        return dice_value == 6
+
+    # Token is already on the path
+    new_position = current_position + dice_value
+
+    return new_position < len(PATH)
+
+#
+# Move token function
 
 def move_token(token_index, amount):
     global dice_value
@@ -252,8 +269,12 @@ while running:
                             (mouse_y - token_y) ** 2) ** 0.5
 
                 if distance <= CELL_SIZE // 3:
-                    selected_token = i
-                    print("Selected token:", i)
+
+                    if can_move(i):
+                        selected_token = i
+                        print("Selected token:", i)
+                    else:
+                        print("Token cannot move.")
 
             
 
