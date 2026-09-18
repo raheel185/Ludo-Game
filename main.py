@@ -385,6 +385,10 @@ while running:
                     current_player,
                     tokens[current_player][i]
                     )
+
+                    if board_position is None:
+                        continue
+
                     column, row = PATH[board_position]
 
                 token_x = (
