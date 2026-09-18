@@ -131,10 +131,17 @@ PLAYER_STARTS = [
 ]
 
 def get_board_position(player_index, progress):
-    return (PLAYER_STARTS[player_index] + progress) % len(PATH)
+    if progress < MAIN_TRACK_LENGTH:
+        return (PLAYER_STARTS[player_index] + progress) % MAIN_TRACK_LENGTH
+
+    return None
 
 # 
 # Game State Variables
+
+MAIN_TRACK_LENGTH = 52
+HOME_PATH_LENGTH = 6
+FINISH_POSITION = MAIN_TRACK_LENGTH + HOME_PATH_LENGTH
 
 current_player = 0
 
@@ -165,7 +172,12 @@ def draw_token(
         column, row = BASE_POSITIONS[player_index][token_index]
     else:
         board_position = get_board_position(player_index, position)
-        column, row = PATH[board_position]
+
+        if board_position is not None:
+            column, row = PATH[board_position]
+        else:
+            # Home path will be implemented next
+            return
 
     x = column * CELL_SIZE + CELL_SIZE // 2 + offset_x
     y = row * CELL_SIZE + CELL_SIZE // 2 + offset_y
@@ -263,11 +275,14 @@ def can_move(token_index):
     if current_position == -1:
         return dice_value == 6
 
-    # Token is already on the path
+    # Token is already finished
+    if current_position >= FINISH_POSITION:
+        return False
+
     new_position = current_position + dice_value
 
-    # Allow the token to wrap around the board
-    return True
+    # Don't allow the token to go beyond final home
+    return new_position <= FINISH_POSITION
 
 #
 #
@@ -291,19 +306,21 @@ def move_token(token_index, amount):
 
     # Token is in base
     if current_position == -1:
-
         if amount == 6:
-            # 0 means the token has just entered the track
             tokens[current_player][token_index] = 0
             dice_value = None
-
         return
 
-    # Token is already on the path
+    # Token is already finished
+    if current_position >= FINISH_POSITION:
+        return
+
     new_position = current_position + amount
 
-    tokens[current_player][token_index] = new_position
-    dice_value = None
+    if new_position <= FINISH_POSITION:
+        tokens[current_player][token_index] = new_position
+        dice_value = None
+
 
 # end move func
 #
