@@ -123,14 +123,18 @@ PLAYER_COLORS = [
     BLUE
 ]
 
-PLAYER_STARTS = [0, 13, 26, 39]
+PLAYER_STARTS = [
+    0,   # Red    → (6, 0)
+    13,  # Green  → (14, 6)
+    26,  # Yellow → (7, 14)
+    39   # Blue   → (0, 7)
+]
 
 def get_board_position(player_index, progress):
     return (PLAYER_STARTS[player_index] + progress) % len(PATH)
 
 # 
 # Game State Variables
-#
 
 current_player = 0
 
@@ -277,6 +281,8 @@ def has_any_legal_move():
 
 #
 # Move token function
+#
+
 
 def move_token(token_index, amount):
     global dice_value
@@ -287,8 +293,10 @@ def move_token(token_index, amount):
     if current_position == -1:
 
         if amount == 6:
-            tokens[current_player][token_index] = PLAYER_STARTS[current_player]
+            # 0 means the token has just entered the track
+            tokens[current_player][token_index] = 0
             dice_value = None
+
         return
 
     # Token is already on the path
