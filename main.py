@@ -125,6 +125,9 @@ PLAYER_COLORS = [
 
 PLAYER_STARTS = [0, 13, 26, 39]
 
+def get_board_position(player_index, progress):
+    return (PLAYER_STARTS[player_index] + progress) % len(PATH)
+
 # 
 # Game State Variables
 #
@@ -145,7 +148,6 @@ TOKEN_COLOR = GREEN
 
 #
 
-
 def draw_token(
     position,
     color,
@@ -158,26 +160,16 @@ def draw_token(
     if position == -1:
         column, row = BASE_POSITIONS[player_index][token_index]
     else:
-        column, row = PATH[position]
+        board_position = get_board_position(player_index, position)
+        column, row = PATH[board_position]
 
     x = column * CELL_SIZE + CELL_SIZE // 2 + offset_x
     y = row * CELL_SIZE + CELL_SIZE // 2 + offset_y
 
     if selected:
-        pygame.draw.circle(
-            screen,
-            BLACK,
-            (x, y),
-            CELL_SIZE // 2
-        )
+        pygame.draw.circle(screen, BLACK, (x, y), CELL_SIZE // 2)
 
-    pygame.draw.circle(
-        screen,
-        color,
-        (x, y),
-        CELL_SIZE // 3
-    )
-
+    pygame.draw.circle(screen, color, (x, y), CELL_SIZE // 3)
 
 #
 
@@ -300,7 +292,7 @@ def move_token(token_index, amount):
         return
 
     # Token is already on the path
-    new_position = (current_position + amount) % len(PATH)
+    new_position = current_position + amount
 
     tokens[current_player][token_index] = new_position
     dice_value = None
@@ -364,7 +356,11 @@ while running:
                 if tokens[current_player][i] == -1:
                     column, row = BASE_POSITIONS[current_player][i]
                 else:
-                    column, row = PATH[tokens[current_player][i]]
+                    board_position = get_board_position(
+                    current_player,
+                    tokens[current_player][i]
+                    )
+                    column, row = PATH[board_position]
 
                 token_x = (
                     column * CELL_SIZE
