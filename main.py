@@ -67,7 +67,7 @@ PATH = [
 ]
 
 BASE_POSITIONS = [
-    # Player 1 - Red
+    # Player1 - Red
     [
         (2, 2),
         (4, 2),
@@ -75,7 +75,7 @@ BASE_POSITIONS = [
         (4, 4)
     ],
 
-    # Player 2 - Green
+    # Player2 - Green
     [
         (10, 2),
         (12, 2),
