@@ -105,9 +105,9 @@ ROWS = 15
 COLS = 15
 CELL_SIZE = 40
 
-#
-# colors
-#
+
+# Colors
+
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 
