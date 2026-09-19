@@ -7,7 +7,7 @@ font = pygame.font.Font(None, 50)
 player_font = pygame.font.Font(None, 25)
 
 screen = pygame.display.set_mode((800, 600))
-pygame.display.set_caption("My Ludo Game")
+pygame.display.set_caption("Ludo Game")
 
 # 
 
