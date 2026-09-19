@@ -136,8 +136,8 @@ def get_board_position(player_index, progress):
 
     return None
 
-# 
-# Game State Variables
+
+# State variables
 
 MAIN_TRACK_LENGTH = 52
 HOME_PATH_LENGTH = 6
